@@ -1,6 +1,10 @@
 using BigDataETL.Repository.Domain;
+using BigDataETL.Repository.Interfaces;
+using BigDataETL.Service.API;
+using BigDataETL.Service.Interfaces;
 using BigDataETL.Service.Services;
 using Microsoft.EntityFrameworkCore;
+using ToDoList.Repository.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +16,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 #region DI Container
-builder.Services.AddScoped<ApiCaller>();
+builder.Services.AddScoped<FlightAPIService>();
+builder.Services.AddScoped<MappingService>();
+
+builder.Services.AddScoped<IFlightRepository, FlightRepository>();
+builder.Services.AddScoped<IFlightService, FlightService>();
 #endregion
 
 builder.Services.AddDbContext<BigDataContext>(options =>

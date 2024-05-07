@@ -1,6 +1,6 @@
 ﻿namespace BigDataETL.Service.DTOs
 {
-    public class Flight
+    public class FlightDTO
     {
         public string? Icao24 { get; set; }
         public string? Callsign { get; set; }

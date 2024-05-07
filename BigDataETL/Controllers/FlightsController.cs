@@ -1,5 +1,5 @@
+using BigDataETL.Service.API;
 using BigDataETL.Service.DTOs;
-using BigDataETL.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BigDataETL.Controllers
@@ -10,9 +10,9 @@ namespace BigDataETL.Controllers
     {
       
         private readonly ILogger<FlightsController> _logger;
-        private readonly ApiCaller _apiCaller;
+        private readonly FlightAPIService _apiCaller;
 
-        public FlightsController(ILogger<FlightsController> logger, ApiCaller apiCaller)
+        public FlightsController(ILogger<FlightsController> logger, FlightAPIService apiCaller)
         {
             _logger = logger;
             _apiCaller = apiCaller;
@@ -21,7 +21,7 @@ namespace BigDataETL.Controllers
         [HttpGet(Name = "GetFligts")]
         public async Task Get()
         {
-            List<Flight> flights = await _apiCaller.GetFlights();
+            List<FlightDTO> flights = await _apiCaller.GetFlights();
         }
     }
 }
