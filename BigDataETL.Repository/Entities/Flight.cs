@@ -1,7 +1,11 @@
-﻿namespace BigDataETL.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BigDataETL.Repository.Entites
 {
     public class Flight
     {
+        [Key]
+        public int FlightID { get; set; }
         public string? Icao24 { get; set; }
         public string? Callsign { get; set; }
         public string? Origin_country { get; set; }

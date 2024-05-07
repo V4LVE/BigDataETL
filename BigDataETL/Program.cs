@@ -1,4 +1,6 @@
-using BigDataETL.Services;
+using BigDataETL.Repository.Domain;
+using BigDataETL.Service.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,12 @@ builder.Services.AddSwaggerGen();
 #region DI Container
 builder.Services.AddScoped<ApiCaller>();
 #endregion
+
+builder.Services.AddDbContext<BigDataContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LaptopCon"));
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("DesktopCon"));
+});
 
 var app = builder.Build();
 

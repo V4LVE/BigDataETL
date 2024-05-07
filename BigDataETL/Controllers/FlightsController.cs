@@ -1,5 +1,5 @@
-using BigDataETL.Models;
-using BigDataETL.Services;
+using BigDataETL.Service.DTOs;
+using BigDataETL.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BigDataETL.Controllers

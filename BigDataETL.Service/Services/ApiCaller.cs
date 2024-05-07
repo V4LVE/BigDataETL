@@ -1,18 +1,17 @@
-﻿using BigDataETL.Models;
+﻿using BigDataETL.Service.DTOs;
+using LinqLangProjekt.Utility;
 using System.Text.Json;
 
-namespace BigDataETL.Services
+namespace BigDataETL.Service.Services
 {
-    public class ApiCaller
+    public class ApiCaller : FlightsRestClient
     {
         public async Task<List<Flight>> GetFlights()
         {
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
-            var client = new HttpClient();
-            var response = await client.GetAsync("https://opensky-network.org/api/states/all?lamin=54.963435&lomin=8.275856&lamax=57.817087&lomax=10.870537");
-            var content = await response.Content.ReadAsStringAsync();
-            var flights = JsonSerializer.Deserialize<FlightsModel>(content);
+            string endpoint = "states/all?lamin=54.963435&lomin=8.275856&lamax=57.817087&lomax=10.870537";
+            var flights = await CallEndpointAsync<FlightsModel>(endpoint);
             var temp = flights.states.Select(f => new Flight
             {
                 Icao24 = f[0].ToString(),

@@ -1,4 +1,4 @@
-﻿namespace BigDataETL.Models
+﻿namespace BigDataETL.Service.DTOs
 {
     public class FlightsModel
     {
