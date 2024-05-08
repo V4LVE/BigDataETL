@@ -2,6 +2,7 @@
 using BigDataETL.Service.API;
 using BigDataETL.Service.DTOs;
 using BigDataETL.Service.Interfaces;
+using BigDataETL.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading;
@@ -15,10 +16,7 @@ namespace BigDataETL.WebService.Controllers
 
         private readonly ILogger<FlightsController> _logger;
         private readonly IFlightService _flightService;
-        private Timer timer;
 
-        public event EventHandler<List<FlightDTO>> OnDataProcessed;
-        private CancellationTokenSource cancellationTokenSource;
 
         public TimerController(ILogger<FlightsController> logger, IFlightService flightService)
         {
@@ -27,33 +25,55 @@ namespace BigDataETL.WebService.Controllers
         }
 
         [HttpPost]
-        [Route("StartTimer")]
-        public async Task<IActionResult> StartTimer()
+        [Route("Test")]
+        public async Task<IActionResult> StartTest()
         {
-            if (timer == null)
-            {
-                cancellationTokenSource = new CancellationTokenSource();
-                timer = new Timer(async _ =>
-                {
-                    try
-                    {
-                        var response = await _flightService.ProcessData();
-                        OnDataProcessed?.Invoke(this, response);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        Console.WriteLine("API call timed out.");
-                    }
-                }, null, 0, 300000);
-                return Ok("Timer started");
-                
-            }
-            else
-            {
-                return BadRequest("Timer is already running");
-            }
-            
+            var autoEvent = new AutoResetEvent(false);
+                var stateTimer = new Timer(_flightService.ProcessData,autoEvent, 0, 300000);
+            return Ok();
+
         }
+
+        [HttpPost]
+        [Route("TestLoop")]
+        public async Task<IActionResult> StopTimer()
+        {
+            while (true)
+            {
+                await _flightService.ProcessDataTest();
+                await Task.Delay(100000);
+            }
+        }
+        //[HttpPost]
+        //[Route("StartTimer")]
+        //public async Task<IActionResult> StartTimer()
+        //{
+        //    if (timer == null)
+        //    {
+        //        using (var scope = this._serviceProvider.CreateScope())
+        //        {
+        //            cancellationTokenSource = new CancellationTokenSource();
+        //            timer = new Timer(async _ =>
+        //            {
+        //                try
+        //                {
+        //                    var response = await _flightService.ProcessData();
+        //                    OnDataProcessed?.Invoke(this, response);
+        //                }
+        //                catch (OperationCanceledException)
+        //                {
+        //                    Console.WriteLine("API call timed out.");
+        //                }
+        //            }, null, 0, 300000);
+        //            return Ok("Timer started");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return BadRequest("Timer is already running");
+        //    }
+            
+        //}
 
        
     }

@@ -38,12 +38,20 @@ namespace BigDataETL.Service.Services
             await _flightRepository.InsertData(_mappingService._mapper.Map<List<Flight>>(flights));
         }
 
-        public async Task<List<FlightDTO>> ProcessData()
+        public async void ProcessData(Object state)
+        {
+            AutoResetEvent autoEvent = (AutoResetEvent)state;
+            var flights = await _flightAPIService.GetFlights();
+            await _flightRepository.InsertData(_mappingService._mapper.Map<List<Flight>>(flights));
+            await Console.Out.WriteLineAsync("Data was processed");
+            autoEvent.Set();
+        }
+
+        public async Task ProcessDataTest()
         {
             var flights = await _flightAPIService.GetFlights();
-            await InsertData(flights);
+            await _flightRepository.InsertData(_mappingService._mapper.Map<List<Flight>>(flights));
             await Console.Out.WriteLineAsync("Data was processed");
-            return flights;
         }
 
     }

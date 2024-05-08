@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace BigDataETL.Repository.Entites
 {
@@ -23,6 +24,7 @@ namespace BigDataETL.Repository.Entites
         public string? Squawk { get; set; }
         public bool? Spi { get; set; }
         public int? Position_source { get; set; }
+        public DateTime EntryDate { get; set; } = DateTime.Now;
 
     }
 }

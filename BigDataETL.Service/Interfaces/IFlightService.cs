@@ -24,6 +24,8 @@ namespace BigDataETL.Service.Interfaces
         /// Proess Data
         /// </summary>
         /// <returns></returns>
-        Task<List<FlightDTO>> ProcessData();
+        void ProcessData(Object state);
+
+        Task ProcessDataTest();
     }
 }

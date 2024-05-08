@@ -31,7 +31,7 @@ namespace ToDoList.Repository.Repositories
             List<Flight> insertFlights = new();
             foreach (var flight in flights)
             {
-                var flightExists = await _dbContext.Flights.FirstOrDefaultAsync(f => f.Callsign == flight.Callsign && f.Icao24 == flight.Icao24);
+                var flightExists = await _dbContext.Flights.OrderByDescending(f => f.EntryDate).FirstOrDefaultAsync(f => f.Callsign == flight.Callsign && f.Icao24 == flight.Icao24);
 
 
                 if (flightExists != null)
