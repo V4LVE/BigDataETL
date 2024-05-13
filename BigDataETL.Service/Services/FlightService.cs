@@ -6,6 +6,7 @@ using BigDataETL.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,9 @@ namespace BigDataETL.Service.Services
         private readonly MappingService _mappingService;
         private readonly IFlightRepository _flightRepository;
         private readonly FlightAPIService _flightAPIService;
-        public Timer Timer { get; set; }
+        public Timer? Timer { get; set; }
         public bool TimerRunning { get; set; } = false;
+        public List<double> ExecutionTimes { get; set; } = new();
         #endregion
 
         #region Constructor
@@ -42,9 +44,11 @@ namespace BigDataETL.Service.Services
 
         public string StartDataFetchingTimer()
         {
+           
             // Start a timer to fetch data every 5 minutes
             if (!TimerRunning)
             {;
+                
                 Timer = new Timer(ProcessData, null, 0, 300000);
                
                 TimerRunning = true;
@@ -63,7 +67,15 @@ namespace BigDataETL.Service.Services
             {
                 Timer?.Dispose();
                 TimerRunning = false;
-                return "Timer Stopped";
+                string response = "Timer Stopped";
+                response += Environment.NewLine + $"Average Execution time: {ExecutionTimes.Average()}";
+                response += Environment.NewLine + "Execution Times:";
+                foreach (var time in ExecutionTimes)
+                {
+                    response +=  Environment.NewLine + time.ToString();
+                }
+                ExecutionTimes.Clear();
+                return response;
             }
             else
             {
@@ -76,11 +88,15 @@ namespace BigDataETL.Service.Services
 
         public async void ProcessData(Object state)
         {
+            Stopwatch stopwatch = new();
             try
             {
+                stopwatch.Start();
                 // Fetch data from the API and insert into repository
                 var flights = await _flightAPIService.GetFlights();
                 await _flightRepository.InsertData(_mappingService._mapper.Map<List<Flight>>(flights));
+                stopwatch.Stop();
+                ExecutionTimes.Add(stopwatch.Elapsed.TotalSeconds);
                 await Console.Out.WriteLineAsync("Data was processed");
             }
             catch (Exception ex)
