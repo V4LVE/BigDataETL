@@ -25,25 +25,21 @@ namespace BigDataETL.WebService.Controllers
         }
 
         [HttpPost]
-        [Route("Test")]
-        public async Task<IActionResult> StartTest()
+        [Route("Start CallBack Timer")]
+        public async Task<IActionResult> StartTimer()
         {
-            _flightService.StartDataFetchingTimer();
-            return Ok();
+            return Ok(_flightService.StartDataFetchingTimer());
 
         }
 
         [HttpPost]
-        [Route("TestLoop")]
+        [Route("Stop Callback Timer")]
         public async Task<IActionResult> StopTimer()
         {
-            while (true)
-            {
-                await _flightService.ProcessDataTest();
-                await Task.Delay(100000);
-            }
+            return Ok(_flightService.StopDataFetchingTimer());
+
         }
-        //[HttpPost]
+
         //[Route("StartTimer")]
         //public async Task<IActionResult> StartTimer()
         //{

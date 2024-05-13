@@ -23,7 +23,13 @@ namespace BigDataETL.Service.Interfaces
         /// <summary>
         /// Start Data Fetching Timer
         /// </summary>
-        public void StartDataFetchingTimer();
+        public string StartDataFetchingTimer();
+
+        /// <summary>
+        /// Stop Data Fetching Timer
+        /// </summary>
+        /// <returns></returns>
+        public string StopDataFetchingTimer();
 
         /// <summary>
         /// Proess Data

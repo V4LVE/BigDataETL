@@ -17,8 +17,8 @@ namespace BigDataETL.Service.Services
         private readonly MappingService _mappingService;
         private readonly IFlightRepository _flightRepository;
         private readonly FlightAPIService _flightAPIService;
-        private Timer _timer;
-        private bool _timerRunning = false; 
+        public Timer Timer { get; set; }
+        public bool TimerRunning { get; set; } = false;
         #endregion
 
         #region Constructor
@@ -40,15 +40,38 @@ namespace BigDataETL.Service.Services
             await _flightRepository.InsertData(_mappingService._mapper.Map<List<Flight>>(flights));
         }
 
-        public void StartDataFetchingTimer()
+        public string StartDataFetchingTimer()
         {
             // Start a timer to fetch data every 5 minutes
-            if (!_timerRunning)
+            if (!TimerRunning)
+            {;
+                Timer = new Timer(ProcessData, null, 0, 300000);
+               
+                TimerRunning = true;
+                return "Timer Started";
+            }
+            else
             {
-                _timer = new Timer(ProcessData, null, 0, 300000);
-                _timerRunning = true;
+                return "Timer already running";
             }
         }
+
+        public string StopDataFetchingTimer()
+        {
+            // Stop the data fetching timer
+            if (TimerRunning)
+            {
+                Timer?.Dispose();
+                TimerRunning = false;
+                return "Timer Stopped";
+            }
+            else
+            {
+                return "No timer is running";
+            }
+           
+        }
+        
 
 
         public async void ProcessData(Object state)

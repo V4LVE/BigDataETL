@@ -16,11 +16,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 #region DI Container
-builder.Services.AddScoped<FlightAPIService>();
-builder.Services.AddScoped<MappingService>();
+builder.Services.AddSingleton<FlightAPIService>();
+builder.Services.AddSingleton<MappingService>();
 
-builder.Services.AddScoped<IFlightRepository, FlightRepository>();
-builder.Services.AddScoped<IFlightService, FlightService>();
+builder.Services.AddSingleton<IFlightRepository, FlightRepository>();
+builder.Services.AddSingleton<IFlightService, FlightService>();
 #endregion
 
 
