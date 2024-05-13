@@ -17,6 +17,8 @@ namespace BigDataETL.Service.Services
         private readonly MappingService _mappingService;
         private readonly IFlightRepository _flightRepository;
         private readonly FlightAPIService _flightAPIService;
+        private Timer _timer;
+        private bool _timerRunning = false; 
         #endregion
 
         #region Constructor
@@ -38,13 +40,31 @@ namespace BigDataETL.Service.Services
             await _flightRepository.InsertData(_mappingService._mapper.Map<List<Flight>>(flights));
         }
 
+        public void StartDataFetchingTimer()
+        {
+            // Start a timer to fetch data every 5 minutes
+            if (!_timerRunning)
+            {
+                _timer = new Timer(ProcessData, null, 0, 300000);
+                _timerRunning = true;
+            }
+        }
+
+
         public async void ProcessData(Object state)
         {
-            AutoResetEvent autoEvent = (AutoResetEvent)state;
-            var flights = await _flightAPIService.GetFlights();
-            await _flightRepository.InsertData(_mappingService._mapper.Map<List<Flight>>(flights));
-            await Console.Out.WriteLineAsync("Data was processed");
-            autoEvent.Set();
+            try
+            {
+                // Fetch data from the API and insert into repository
+                var flights = await _flightAPIService.GetFlights();
+                await _flightRepository.InsertData(_mappingService._mapper.Map<List<Flight>>(flights));
+                await Console.Out.WriteLineAsync("Data was processed");
+            }
+            catch (Exception ex)
+            {
+                // Log and handle the exception
+                await Console.Out.WriteLineAsync(ex.Message + "An error occoured");
+            }
         }
 
         public async Task ProcessDataTest()

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BigDataETL.Repository.Migrations
 {
     [DbContext(typeof(BigDataContext))]
-    [Migration("20240507090544_Init")]
+    [Migration("20240513063100_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -38,6 +38,9 @@ namespace BigDataETL.Repository.Migrations
 
                     b.Property<string>("Callsign")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EntryDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<double?>("Geo_altitude")
                         .HasColumnType("float");

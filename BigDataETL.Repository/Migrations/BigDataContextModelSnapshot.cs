@@ -36,6 +36,9 @@ namespace BigDataETL.Repository.Migrations
                     b.Property<string>("Callsign")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("EntryDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<double?>("Geo_altitude")
                         .HasColumnType("float");
 

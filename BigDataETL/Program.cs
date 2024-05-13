@@ -23,11 +23,11 @@ builder.Services.AddScoped<IFlightRepository, FlightRepository>();
 builder.Services.AddScoped<IFlightService, FlightService>();
 #endregion
 
+
 builder.Services.AddDbContext<BigDataContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LaptopCon"));
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("DesktopCon"));
-});
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LaptopCon"))
+    .EnableSensitiveDataLogging(), ServiceLifetime.Singleton);
+
 
 var app = builder.Build();
 

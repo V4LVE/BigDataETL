@@ -28,8 +28,7 @@ namespace BigDataETL.WebService.Controllers
         [Route("Test")]
         public async Task<IActionResult> StartTest()
         {
-            var autoEvent = new AutoResetEvent(false);
-                var stateTimer = new Timer(_flightService.ProcessData,autoEvent, 0, 300000);
+            _flightService.StartDataFetchingTimer();
             return Ok();
 
         }

@@ -21,6 +21,11 @@ namespace BigDataETL.Service.Interfaces
         Task InsertData(List<FlightDTO> flights);
 
         /// <summary>
+        /// Start Data Fetching Timer
+        /// </summary>
+        public void StartDataFetchingTimer();
+
+        /// <summary>
         /// Proess Data
         /// </summary>
         /// <returns></returns>

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -32,7 +33,8 @@ namespace BigDataETL.Repository.Migrations
                     Geo_altitude = table.Column<double>(type: "float", nullable: true),
                     Squawk = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Spi = table.Column<bool>(type: "bit", nullable: true),
-                    Position_source = table.Column<int>(type: "int", nullable: true)
+                    Position_source = table.Column<int>(type: "int", nullable: true),
+                    EntryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
